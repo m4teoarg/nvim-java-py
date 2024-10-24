@@ -313,6 +313,10 @@ require('lazy').setup({
     },
   },
   { 'nvim-telescope/telescope-live-grep-args.nvim' },
+  {
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+  },
 
   { 'nvchad/volt', lazy = true },
   { 'nvchad/minty', lazy = true },
