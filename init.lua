@@ -145,6 +145,18 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
+      -- Función para obtener el nombre del LSP activo
+      local lsp_status = function()
+        local clients = vim.lsp.get_active_clients()
+        if next(clients) == nil then
+          return 'No LSP'
+        end
+        local client_names = {}
+        for _, client in pairs(clients) do
+          table.insert(client_names, client.name)
+        end
+        return table.concat(client_names, ', ')
+      end
       require('lualine').setup({
         options = {
           theme = 'everforest',
@@ -153,7 +165,7 @@ require('lazy').setup({
         },
         sections = {
           lualine_a = { 'mode' },
-          lualine_b = { 'diff', 'diagnostics' },
+          lualine_b = { 'diff', 'diagnostics', lsp_status },
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = {
             { 'fileformat', 'filetype' },
@@ -316,6 +328,24 @@ require('lazy').setup({
   {
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+  },
+
+  {
+    'supermaven-inc/supermaven-nvim',
+    config = function()
+      require('supermaven-nvim').setup({
+        keymaps = {
+          accept_suggestion = '<Tab>',
+          clear_suggestion = '<C-\\>',
+          accept_word = '<C-j>',
+        },
+        ignore_filetypes = {
+          cpp = true,
+        },
+        suggestion_color = '#ffffff',
+        cterm = 244,
+      })
+    end,
   },
 
   { 'nvchad/volt', lazy = true },
